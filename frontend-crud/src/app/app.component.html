@@ -1,0 +1,53 @@
+<div class="crud-container">
+  <h1 class="titulo">Gestor de Tareas</h1>
+  
+  <div class="input-group">
+    <input 
+      type="text" 
+      [(ngModel)]="nuevaTareaTitulo" 
+      (keyup.enter)="agregarTarea()"
+      placeholder="Título de la tarea" 
+      class="input-tarea">
+    <input 
+      type="text" 
+      [(ngModel)]="nuevaTareaDescripcion" 
+      (keyup.enter)="agregarTarea()"
+      placeholder="Descripción (opcional)" 
+      class="input-tarea">
+    <button (click)="agregarTarea()" class="btn btn-primary">Agregar</button>
+  </div>
+
+  <ul class="lista-tareas">
+    <li *ngFor="let tarea of tareas" class="item-tarea">
+      <ng-container *ngIf="tareaEditando === tarea._id; else modoNormal">
+        <input 
+          type="text" 
+          [(ngModel)]="tituloEditando" 
+          (keyup.enter)="guardarEdicion(tarea)"
+          class="input-editar">
+        <div class="acciones">
+          <button (click)="guardarEdicion(tarea)" class="btn btn-success" title="Guardar">💾</button>
+          <button (click)="cancelarEdicion()" class="btn btn-secondary" title="Cancelar">✖</button>
+        </div>
+      </ng-container>
+      <ng-template #modoNormal>
+        <span class="texto-tarea" [class.completada]="tarea.completada" (click)="verDetalle(tarea)">
+          {{ tarea.titulo }}
+        </span>
+        <div class="acciones">
+          <button (click)="iniciarEdicion(tarea)" class="btn btn-primary btn-editar" title="Editar">✏️</button>
+          <button (click)="eliminarTarea(tarea._id)" class="btn btn-danger" title="Eliminar">🗑</button>
+        </div>
+      </ng-template>
+    </li>
+  </ul>
+
+  <div *ngIf="tareaSeleccionada" class="modal-detalle" (click)="cerrarDetalle()">
+    <div class="modal-contenido" (click)="$event.stopPropagation()">
+      <h2>{{ tareaSeleccionada.titulo }}</h2>
+      <p><strong>Descripción:</strong> {{ tareaSeleccionada.descripcion || 'Sin descripción' }}</p>
+      <p><strong>Estado:</strong> {{ tareaSeleccionada.completada ? 'Completada' : 'Pendiente' }}</p>
+      <button (click)="cerrarDetalle()" class="btn btn-secondary">Cerrar</button>
+    </div>
+  </div>
+</div>
