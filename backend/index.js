@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -9,7 +10,7 @@ app.use(cors()); // Permite peticiones desde el frontend
 app.use(express.json()); // Permite recibir datos en formato JSON
 
 // 1. Conexión a MongoDB (Asegúrate de que MongoDB esté corriendo localmente en este puerto)
-mongoose.connect('mongodb+srv://raftelsilva_db_user:txi2bjOQKjElhHPG@cluster0.b61bmgf.mongodb.net/?appName=Cluster0')
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('¡Conectado a MongoDB!'))
   .catch(err => console.error('Error al conectar a Mongo:', err));
 
